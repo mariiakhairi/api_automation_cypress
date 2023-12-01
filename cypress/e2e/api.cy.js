@@ -29,4 +29,14 @@ describe('REST api testing with cypress', () => {
 		)
 		cy.get('@nonExisitingUser').its('status').should('equal', 404)
 	})
+
+	it('API Tests - GET Request', () => {
+		cy.request({ method: 'GET', url: '/users/2' }).as('user')
+		cy.get('@user').then((res) => {
+			cy.log(JSON.stringify(res.body))
+			expect(res.body.data.id).equal(2)
+			expect(res.body.data.email).equal('janet.weaver@reqres.in')
+			expect(res.body.data.last_name).not.to.contain('someFunnyName')
+		})
+	})
 })
