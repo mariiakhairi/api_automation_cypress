@@ -39,4 +39,35 @@ describe('REST api testing with cypress', () => {
 			expect(res.body.data.last_name).not.to.contain('someFunnyName')
 		})
 	})
+
+	it('API Tests - POST Request', () => {
+		cy.request({
+			method: 'POST',
+			url: '/login',
+			body: {
+				email: 'eve.holt@reqres.in',
+				password: 'cityslicka',
+			},
+		}).as('loginRequest')
+		cy.get('@loginRequest').then((res) => {
+			cy.log(JSON.stringify(res.body))
+			expect(res.status).equal(200)
+			expect(res.body.token).equal('QpwL5tke4Pnpja7X4')
+		})
+	})
+	it('API Tests - POST Request error', () => {
+		cy.request({
+			method: 'POST',
+			url: '/login',
+			body: {
+				email: 'peter@klaven',
+			},
+			failOnStatusCode: false,
+		}).as('loginRequest')
+		cy.get('@loginRequest').then((res) => {
+			cy.log(JSON.stringify(res.body))
+			expect(res.status).equal(400)
+			expect(res.body.error).equal('Missing password')
+		})
+	})
 })
