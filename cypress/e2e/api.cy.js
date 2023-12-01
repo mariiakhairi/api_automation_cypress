@@ -19,4 +19,14 @@ describe('REST api testing with cypress', () => {
 			.its('connection')
 			.should('include', 'keep-alive')
 	})
+
+	it('API Tests - Status codes', () => {
+		cy.request('/users/2').as('exisitingUser')
+		cy.get('@exisitingUser').its('status').should('equal', 200)
+
+		cy.request({ url: '/users/non-exisit', failOnStatusCode: false }).as(
+			'nonExisitingUser',
+		)
+		cy.get('@nonExisitingUser').its('status').should('equal', 404)
+	})
 })
