@@ -70,4 +70,32 @@ describe('REST api testing with cypress', () => {
 			expect(res.body.error).equal('Missing password')
 		})
 	})
+
+	it('API Tests - DELETE Request', () => {
+		cy.request({
+			method: 'DELETE',
+			url: '/users/2',
+		}).as('deleteUser')
+		cy.get('@deleteUser').then((res) => {
+			cy.log(JSON.stringify(res.body))
+			expect(res.status).equal(204)
+		})
+	})
+
+	it('API Tests - PUT Request', () => {
+		cy.request({
+			method: 'PUT',
+			url: '/users/2',
+			body: {
+				email: 'email-update@reqres.in',
+				name: 'name-update',
+			},
+		}).as('putRequest')
+		cy.get('@putRequest').then((res) => {
+			cy.log(JSON.stringify(res.body))
+			expect(res.status).equal(200)
+			expect(res.body.email).equal('email-update@reqres.in')
+			expect(res.body.name).equal('name-update')
+		})
+	})
 })
